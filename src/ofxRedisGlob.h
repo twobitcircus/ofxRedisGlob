@@ -1,7 +1,7 @@
 #include "ofMain.h"
 #include "hiredis/hiredis.h"
 
-class ofxRedisGlob {
+class ofxRedisGlob : public ofThread {
   public:
     redisContext *rctx;
     redisReply *reply;
@@ -18,11 +18,19 @@ class ofxRedisGlob {
     void update();
     void update(ofEventArgs &eventArgs);
 
+    void subscribeThread();
+
+    void threadedFunction() {
+      subscribeThread();
+    }
+
     string get_val(string key, string _default="") {
+      string res = _default;
+      lock();
       if (get_map.count(key))
-        return get_map[key];
-      else
-        return _default;
+        res = get_map[key];
+      unlock();
+      return res;
     }
 
     template<typename T>
