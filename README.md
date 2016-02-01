@@ -4,7 +4,7 @@ This is a quick and easy addon for using a redis server to get and set global st
 
 There's an easy-to-access redis context in this object which you can easily use for other stuff too
 
-<code>
+```
 #include "ofxRedisGlob.h"
 
 ofxRedisGlob glob;
@@ -21,5 +21,5 @@ void ofApp::update() {
   string monkeys = glob.get_val("monkeys");
   glob.set_val("something", 123); // second argument is automatically cast to a string
 }
-</code>
+```
 
