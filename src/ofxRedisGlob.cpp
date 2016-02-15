@@ -42,17 +42,18 @@ void ofxRedisGlob::subscribeThread() {
     }
     return;
   }
-
   string cmd = "SUBSCRIBE " + ofJoinString(get_keys, " ");
   sub_reply = (redisReply *)redisCommand(sub_rctx,cmd.c_str());
   freeReplyObject(sub_reply);
   while(isThreadRunning() && redisGetReply(sub_rctx,(void **)&sub_reply) == REDIS_OK) {
-    string channel = sub_reply->element[1]->str;
-    string value = sub_reply->element[2]->str;
+    if (!strcmp(sub_reply->element[0]->str, "message")) {
+      string channel = sub_reply->element[1]->str;
+      string value = sub_reply->element[2]->str;
 
-    lock();
-    get_map[channel] = value;
-    unlock();
+      lock();
+      get_map[channel] = value;
+      unlock();
+    }
     freeReplyObject(sub_reply);
   }
 }
