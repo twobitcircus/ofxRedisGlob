@@ -1,3 +1,4 @@
+#pragma once
 #include "ofMain.h"
 #include "hiredis/hiredis.h"
 
